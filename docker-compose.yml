@@ -1,0 +1,35 @@
+version: '3'
+services:
+  php-backend:
+    build: ./php-backend
+    ports:
+      - "8082:80"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8083:80"
+    depends_on:
+      - php-backend
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: appdb
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+        

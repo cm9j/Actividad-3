@@ -1,0 +1,35 @@
+<script>
+  fetch('http://localhost:8082/index.php', {
+      method: 'GET',
+      credentials: 'include'  
+  })
+  .then(response => {
+    if (response.status === 401) {
+      window.location.href = 'login.html';
+      return;
+    }
+    return response.json();
+  })
+  .then(data => {
+    const userDiv = document.getElementById('users');
+    data.forEach(user => {
+      const card = document.createElement('div');
+      card.className = 'col-md-4';
+      card.innerHTML = `<div class="card mb-4"><div class="card-body"><h5 class="card-title">ID: ${user.id}</h5><p class="card-text">Email: ${user.email}</p></div></div>`;
+      userDiv.appendChild(card);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+  function logout() {
+    fetch('http://localhost:8082/logout.php', {
+      method: 'POST',
+      credentials: 'include'  
+    }).then(() => window.location.href = 'login.html');
+  }
+</script>
+
+
+
